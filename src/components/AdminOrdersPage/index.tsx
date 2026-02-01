@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import * as XLSX from 'xlsx';
 import { getOrders, updateOrderStatus, deleteOrder, getOrderStats, Order } from '../../services/orderService';
 import { signOut } from '../../services/authService';
 
@@ -204,6 +205,12 @@ const EmptyMessage = styled.div`
   color: #666;
 `;
 
+const ButtonsRow = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
 const RefreshButton = styled.button`
   background: #4CAF50;
   color: white;
@@ -212,10 +219,26 @@ const RefreshButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
-  margin-bottom: 1rem;
 
   &:hover {
     background: #45a049;
+  }
+`;
+
+const ExportButton = styled.button`
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background: #138496;
   }
 `;
 
@@ -300,6 +323,62 @@ const AdminOrdersPage = () => {
     return new Date(dateString).toLocaleString('vi-VN');
   };
 
+  const exportToExcel = () => {
+    if (orders.length === 0) {
+      alert('Không có đơn hàng nào để xuất!');
+      return;
+    }
+
+    // Chuẩn bị dữ liệu cho Excel
+    const excelData = orders.map((order, index) => ({
+      'STT': index + 1,
+      'Mã đơn hàng': order.order_code,
+      'Tên khách hàng': order.customer_name,
+      'Email': order.customer_email || '',
+      'Số điện thoại': order.customer_phone,
+      'Địa chỉ': order.customer_address || '',
+      'Sản phẩm': order.package_title,
+      'Giá sản phẩm': order.package_price,
+      'Số lượng': order.quantity,
+      'Tổng tiền': order.total_amount,
+      'Phương thức thanh toán': order.payment_method || '',
+      'Trạng thái': getStatusText(order.status || 'pending'),
+      'Ngày đặt hàng': formatDate(order.created_at),
+      'Ghi chú': order.notes || ''
+    }));
+
+    // Tạo workbook và worksheet
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Đơn hàng');
+
+    // Điều chỉnh độ rộng cột
+    const colWidths = [
+      { wch: 5 },   // STT
+      { wch: 20 },  // Mã đơn hàng
+      { wch: 25 },  // Tên khách hàng
+      { wch: 30 },  // Email
+      { wch: 15 },  // Số điện thoại
+      { wch: 40 },  // Địa chỉ
+      { wch: 30 },  // Sản phẩm
+      { wch: 15 },  // Giá sản phẩm
+      { wch: 10 },  // Số lượng
+      { wch: 15 },  // Tổng tiền
+      { wch: 25 },  // Phương thức thanh toán
+      { wch: 15 },  // Trạng thái
+      { wch: 20 },  // Ngày đặt hàng
+      { wch: 30 },  // Ghi chú
+    ];
+    worksheet['!cols'] = colWidths;
+
+    // Tạo tên file với ngày hiện tại
+    const today = new Date().toISOString().split('T')[0];
+    const fileName = `DonHang_TrueVegan_${today}.xlsx`;
+
+    // Xuất file
+    XLSX.writeFile(workbook, fileName);
+  };
+
   return (
     <PageContainer>
       <Header>
@@ -340,9 +419,14 @@ const AdminOrdersPage = () => {
           </StatCard>
         </StatsGrid>
 
-        <RefreshButton onClick={fetchData}>
-          🔄 Làm mới dữ liệu
-        </RefreshButton>
+        <ButtonsRow>
+          <RefreshButton onClick={fetchData}>
+            🔄 Làm mới dữ liệu
+          </RefreshButton>
+          <ExportButton onClick={exportToExcel}>
+            📥 Xuất Excel
+          </ExportButton>
+        </ButtonsRow>
 
         <TableContainer>
           {loading ? (
