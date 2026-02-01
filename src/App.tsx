@@ -22,6 +22,9 @@ import Section14 from './components/Section14';
 import OrderDetailPage from './components/OrderDetailPage';
 import CheckoutPage from './components/CheckoutPage';
 import OrderSuccessPage from './components/OrderSuccessPage';
+import AdminOrdersPage from './components/AdminOrdersPage';
+import AdminLoginPage from './components/AdminLoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer';
 
 const HeaderContainer = styled.div`
@@ -76,6 +79,12 @@ function App() {
         <Route path="/order" element={<OrderDetailPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/order-success" element={<OrderSuccessPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminOrdersPage />
+          </ProtectedRoute>
+        } />
       </Routes>
     </Router>
   );

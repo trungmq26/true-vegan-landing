@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import QRPopup from '../QRPopup';
 import { sendOrderNotificationToAdmin, sendOrderConfirmationToCustomer, OrderData } from '../../services/emailService';
+import { createOrder } from '../../services/orderService';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -314,29 +315,55 @@ const CheckoutPage = () => {
     }
   };
 
+  const saveOrderToDatabase = async (paymentMethodText: string) => {
+    const orderResult = await createOrder({
+      customer_name: formData.name,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      customer_address: formData.address,
+      package_title: state.package.title,
+      package_price: state.package.price,
+      quantity: state.quantity,
+      total_amount: totalPrice.toLocaleString() + 'đ',
+      payment_method: paymentMethodText,
+      status: 'pending'
+    });
+
+    return orderResult;
+  };
+
   const handleSubmit = async () => {
     if (validateForm()) {
-      const orderId = '#' + Date.now().toString().slice(-6) + '_' + Math.random().toString(36).substr(2, 3);
-      
-      // Gửi email
-      await sendOrderEmails(orderId);
-      
       if (paymentMethod === 'QR') {
         setShowQRPopup(true);
       } else {
-        // Xử lý đặt hàng COD
-        navigate('/order-success', {
-          state: {
-            orderInfo: {
-              id: orderId,
-              date: new Date().toLocaleDateString('vi-VN'),
-              paymentMethod: 'Thanh toán khi nhận hàng',
-              product: state?.package,
-              quantity: state?.quantity,
-              totalPrice: totalPrice
+        // Lưu đơn hàng vào database
+        const orderResult = await saveOrderToDatabase('Thanh toán khi nhận hàng (COD)');
+
+        if (orderResult.success && orderResult.data) {
+          // Gửi email
+          await sendOrderEmails(orderResult.data.order_code);
+
+          // Xử lý đặt hàng COD
+          navigate('/order-success', {
+            state: {
+              orderInfo: {
+                id: orderResult.data.order_code,
+                date: new Date().toLocaleDateString('vi-VN'),
+                paymentMethod: 'Thanh toán khi nhận hàng',
+                product: state?.package,
+                quantity: state?.quantity,
+                totalPrice: totalPrice,
+                customerName: formData.name,
+                customerPhone: formData.phone,
+                customerEmail: formData.email,
+                customerAddress: formData.address
+              }
             }
-          }
-        });
+          });
+        } else {
+          alert('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại!');
+        }
       }
     }
   };
@@ -345,21 +372,34 @@ const CheckoutPage = () => {
     setShowQRPopup(false);
   };
 
-  const handleQRComplete = () => {
-    const orderId = '#' + Date.now().toString().slice(-6) + '_' + Math.random().toString(36).substr(2, 3);
-    
-    navigate('/order-success', {
-      state: {
-        orderInfo: {
-          id: orderId,
-          date: new Date().toLocaleDateString('vi-VN'),
-          paymentMethod: 'Thanh toán trực tiếp (QR)',
-          product: state?.package,
-          quantity: state?.quantity,
-          totalPrice: totalPrice
+  const handleQRComplete = async () => {
+    // Lưu đơn hàng vào database
+    const orderResult = await saveOrderToDatabase('Thanh toán trực tiếp (QR)');
+
+    if (orderResult.success && orderResult.data) {
+      // Gửi email
+      await sendOrderEmails(orderResult.data.order_code);
+
+      navigate('/order-success', {
+        state: {
+          orderInfo: {
+            id: orderResult.data.order_code,
+            date: new Date().toLocaleDateString('vi-VN'),
+            paymentMethod: 'Thanh toán trực tiếp (QR)',
+            product: state?.package,
+            quantity: state?.quantity,
+            totalPrice: totalPrice,
+            customerName: formData.name,
+            customerPhone: formData.phone,
+            customerEmail: formData.email,
+            customerAddress: formData.address
+          }
         }
-      }
-    });
+      });
+    } else {
+      alert('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại!');
+      setShowQRPopup(false);
+    }
   };
 
   return (

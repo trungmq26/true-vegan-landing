@@ -88,7 +88,7 @@ const OriginalPrice = styled.span`
 `;
 
 const DiscountPrice = styled.span`
-  color: #4CAF50;
+  color: #FF0000;
   font-size: 2rem;
   font-weight: bold;
 `;
@@ -128,7 +128,7 @@ const Feature = styled.li`
 
 const PackagesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin-bottom: 2rem;
 
@@ -177,7 +177,7 @@ const PackageTitle = styled.h4`
 `;
 
 const PackagePrice = styled.div`
-  color: #4CAF50;
+  color: #FF0000;
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
@@ -306,17 +306,10 @@ const OrderDetailPage = () => {
   // Map OrderSection packages to OrderDetailPage packages
   const getDefaultSelectedPackage = () => {
     if (selectedPackageIndex !== null) {
-      switch (selectedPackageIndex) {
-        case 0: return 2; // "Gói Tiêu Chuẩn" -> "Combo 2 TRUE VEGAN PROTEIN"
-        case 1: return 4; // "Gói Tiết Kiệm" -> "Combo 5 TRUE VEGAN PROTEIN +1"
-        case 2: return 3; // "Gói Tối Ưu" -> "Combo 3 TRUE VEGAN PROTEIN"
-        case 3: return 5; // "Hộp Giấy 868g" -> "Hộp Giấy 868g"
-        case 4: return 6; // "Hộp Giấy 868g x2" -> "Hộp Giấy 868g x2"
-        case 5: return 7; // "Hộp Giấy 868g x3" -> "Hộp Giấy 868g x3"
-        default: return 2;
-      }
+      // Index từ OrderSection map trực tiếp sang id (index + 1)
+      return selectedPackageIndex + 1;
     }
-    return 2; // Default to "Combo 2 TRUE VEGAN PROTEIN"
+    return 1; // Default to "COMBO KHỞI ĐỘNG"
   };
   
   const [selectedPackage, setSelectedPackage] = useState<number>(getDefaultSelectedPackage());
@@ -324,72 +317,63 @@ const OrderDetailPage = () => {
   const packages: Package[] = [
     {
       id: 1,
-      title: "1 hộp TRUE VEGAN PROTEIN",
-      price: "550.000đ",
-      originalPrice: "695.000đ",
-      features: ["Gói cơ bản"],
-      discount: "-15%"
+      title: "COMBO KHỞI ĐỘNG",
+      price: "1,100,000đ",
+      originalPrice: "1,336,000đ",
+      features: ["2 Hộp TRUE VEGAN PROTEIN PRO"]
     },
     {
       id: 2,
-      title: "Combo 2 TRUE VEGAN PROTEIN",
-      price: "990.000đ",
-      originalPrice: "1.100.000đ",
+      title: "COMBO TÁI TẠO",
+      price: "2,200,000đ",
+      originalPrice: "2,672,000đ",
       features: [
-        "Tặng 1 bình lắc!"
-      ],
+        "4 Hộp TRUE VEGAN PROTEIN PRO",
+        "FREESHIP TOÀN QUỐC"
+      ]
     },
     {
       id: 3,
-      title: "Combo 3 TRUE VEGAN PROTEIN",
-      price: "1.650.000đ",
-      originalPrice: "2.085.000đ",
+      title: "COMBO PHỤC HỒI",
+      price: "3,300,000đ",
+      originalPrice: "4,008,000đ",
       features: [
-        "Tặng 1 hộp giấy dạng gói như hình!",
+        "6 Hộp TRUE VEGAN PROTEIN PRO",
+        "TẶNG 01 MUỐI TRE",
+        "FREESHIP TOÀN QUỐC"
       ]
     },
     {
       id: 4,
-      title: "Combo 5 TRUE VEGAN PROTEIN +1",
-      price: "2.337.500đ",
-      originalPrice: "2.750.000đ",
+      title: "COMBO TOÀN DIỆN",
+      price: "4,400,000đ",
+      originalPrice: "5,344,000đ",
       features: [
-        "Miễn phí giao hàng toàn quốc",
-        "Giảm 10% cho đơn hàng"
-      ],
-      isBestSeller: true
+        "8 Hộp TRUE VEGAN PROTEIN PRO",
+        "TẶNG 01 TRÀ TUỆ MINH"
+      ]
     },
     {
       id: 5,
-      title: "Hộp Giấy 868g",
-      price: "950.000đ",
-      originalPrice: "1.100.000đ",
+      title: "COMBO GIA ĐÌNH",
+      price: "5,500,000đ",
+      originalPrice: "6,668,000đ",
       features: [
-        "31 Gói TRUE VEGAN PROTEIN",
-        "Tiện lợi mang theo!"
+        "10 Hộp TRUE VEGAN PROTEIN PRO",
+        "TẶNG 02 TRÀ TUỆ MINH"
       ]
     },
     {
       id: 6,
-      title: "Hộp Giấy 868g x2",
-      price: "1.822.100đ",
-      originalPrice: "1.918.000đ",
+      title: "COMBO SỨC KHỎE DÀI HẠN",
+      price: "7,700,000đ",
+      originalPrice: "9,352,000đ",
       features: [
-        "62 Gói TRUE VEGAN PROTEIN (2 hộp)",
-        "Tiết kiệm 95.900đ!"
+        "14 Hộp TRUE VEGAN PROTEIN PRO",
+        "TẶNG 02 TRÀ TUỆ MINH",
+        "FREE SHIP"
       ],
-      discount: "-5%"
-    },
-    {
-      id: 7,
-      title: "Hộp Giấy 868g x3",
-      price: "2.589.300đ",
-      originalPrice: "2.877.000đ",
-      features: [
-        "93 Gói TRUE VEGAN PROTEIN (3 hộp)",
-        "Tiết kiệm 287.700đ + Free ship!"
-      ],
-      discount: "-10%"
+      isBestSeller: true
     }
   ];
 
@@ -430,13 +414,8 @@ const OrderDetailPage = () => {
           <ProductInfo>
             <ProductTitle>TRUE VEGAN PROTEIN - NGUỒN ĐẠM THỰC VẬT THUẦN KHIẾT</ProductTitle>
             <Price>
-                {selectedPackageData?.id === 4 && (
-                  <OriginalPrice>{selectedPackageData.originalPrice}</OriginalPrice>
-                )}
                 <DiscountPrice>{selectedPackageData?.price}</DiscountPrice>
-                {selectedPackageData?.id === 4 && (
-                <DiscountBadge>{selectedPackageData.discount || "-10%"}</DiscountBadge>
-                )}
+                <OriginalPrice>Giá gốc: {selectedPackageData?.originalPrice}</OriginalPrice>
             </Price>
             <Description>
               <h3>Dinh dưỡng thuần chay - Sức mạnh từ thiên nhiên</h3>

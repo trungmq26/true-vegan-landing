@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import productImage from '../../assets/images/section11/a.png';
-import giftBoxImage from '../../assets/images/Screenshot 2025-08-19 at 10.16.55.png';
-import threeBoxImage from '../../assets/images/Screenshot 2025-08-19 at 10.23.18.png';
-import twoSmallBoxImage from '../../assets/images/section11/2.png';
-import fiveBoxImage from '../../assets/images/section11/image.png';
-import paperBoxImage from '../../assets/images/section11/ChatGPT Image Oct 22, 2025, 10_36_05 AM.png';
-import paperBoxImage3 from '../../assets/images/section11/3hopgiay.png';
-import paperBoxImage2 from '../../assets/images/section11/2hopgiay.png';
 
+// Import ảnh combo mới
+import comboKhoiDong from '../../assets/images/order_section/combo_khoi_dong.png';
+import comboTaiTao from '../../assets/images/order_section/combo_tai_tao.png';
+import comboPhucHoi from '../../assets/images/order_section/compo_phuc_hoi.png';
+import comboToanDien from '../../assets/images/order_section/combo_toan_dien.png';
+import comboGiaDinh from '../../assets/images/order_section/combo_gia_dinh.png';
+import comboSucKhoeDaiHan from '../../assets/images/order_section/combo_suc_khoe_dai_han.png';
 
-import ImageModal from '../common/ImageModal';
 
 const OrderContainer = styled.section`
   width: 100%;
@@ -105,48 +103,61 @@ const PackagesGrid = styled.div`
   }
 `;
 
-const PackageCard = styled.div<{ isPopular?: boolean }>`
+const PackageCard = styled.div`
   background: white;
   border-radius: 15px;
-  padding: 2rem;
   color: #333;
   position: relative;
   overflow: hidden;
-
-  ${props => props.isPopular && `
-    border: 3px solid #ff6b6b;
-    transform: scale(1.05);
-
-    @media (max-width: 1024px) {
-      transform: scale(1);
-    }
-  `}
+  border: 2px solid #90EE90;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 
-const PopularBadge = styled.div`
-  position: absolute;
-  top: 20px;
-  right: -35px;
-  background: #ff6b6b;
+const CardHeader = styled.div<{ bgColor?: string }>`
+  background: ${props => props.bgColor || '#84CC16'};
   color: white;
-  padding: 0.5rem 3rem;
-  transform: rotate(45deg);
-  font-size: 0.9rem;
-  font-weight: bold;
+  padding: 1rem;
+  text-align: center;
+  margin: -2px -2px 0 -2px;
+  border-radius: 13px 13px 0 0;
 `;
 
-const PackageTitle = styled.h4`
-  font-size: 1.5rem;
+const CardHeaderTitle = styled.h4`
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0;
+  text-transform: uppercase;
+`;
+
+const CardBody = styled.div`
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const PackageQuantity = styled.h4`
+  font-size: 1.3rem;
   color: #4CAF50;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+`;
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
 `;
 
 const PackageImage = styled.img`
-  width: 100%;
-  height: auto;
-  margin: 1rem 0;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 `;
 
 
@@ -160,22 +171,13 @@ const OriginalPrice = styled.div`
   font-size: 1.1rem;
 `;
 
-const DiscountBadge = styled.span`
-  background: #ff6b6b;
-  color: white;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  margin-left: 0.5rem;
-  font-size: 0.9rem;
-`;
-
 const FinalPrice = styled.div`
   font-size: 2rem;
-  color: #4CAF50;
+  color: #FF0000;
   font-weight: bold;
 `;
 
-const BuyButton = styled.button<{ isPopular?: boolean }>`
+const BuyButton = styled.button`
   width: 100%;
   padding: 1rem;
   border: none;
@@ -184,43 +186,27 @@ const BuyButton = styled.button<{ isPopular?: boolean }>`
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  
-  ${props => props.isPopular ? `
-    background: #ff6b6b;
-    color: white;
-    
-    &:hover {
-      background: #ff5252;
-    }
-  ` : `
-    background: #4CAF50;
-    color: white;
-    
-    &:hover {
-      background: #45a049;
-    }
-  `}
+  background: #FF3700;
+  color: white;
+
+  &:hover {
+    background: #E63200;
+    transform: translateY(-2px);
+  }
 `;
 
 const Bonus = styled.div`
-  background: #fff3cd;
-  color: #856404;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-  font-size: 0.9rem;
+  color: #007900;
+  padding: 0.5rem 0;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  min-height: 50px;
+  text-align: center;
 `;
 
-const ClickableText = styled.span`
-  color: #4CAF50;
-  cursor: pointer;
-  font-weight: bold;
-  text-decoration: underline;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: #45a049;
-  }
+const CardFooter = styled.div`
+  margin-top: auto;
 `;
 
 const Features = styled.div`
@@ -235,19 +221,22 @@ const FeatureItem = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: white;
-  font-size: 1.1rem;
+  color: #2E7D32;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  border: 1px solid #4CAF50;
+  font-weight: 500;
 
   @media (max-width: 768px) {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
   }
 `;
 
 const OrderSection = () => {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalImage, setModalImage] = useState('');
-  const [modalAlt, setModalAlt] = useState('');
   const [timeLeft, setTimeLeft] = useState({
     hours: 12,
     minutes: 0,
@@ -284,80 +273,67 @@ const OrderSection = () => {
     });
   };
 
-  const handleGiftBoxClick = (imageSrc: string, imageAlt: string) => {
-    setModalImage(imageSrc);
-    setModalAlt(imageAlt);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   const packages = [
     {
-      title: "Gói Tiêu Chuẩn",
-      image: twoSmallBoxImage,
-      quantity: "2 Hộp Protein Thực Vật",
-      finalPrice: "990.000đ",
-      bonus: "Tặng 1 bình lắc!",
-      isPopular: false
+      title: "COMBO KHỞI ĐỘNG",
+      image: comboKhoiDong,
+      quantity: "2 HỘP",
+      originalPrice: "1,336,000đ",
+      finalPrice: "1,100,000đ",
+      bonus: "",
+      headerColor: "#84CC16"
     },
     {
-      title: "Gói Tiết Kiệm",
-      image: fiveBoxImage,
-      quantity: "5 Hộp TRUE VEGAN PROTEIN",
-      originalPrice: "2,750,000đ",
-      discount: "-10%",
-      finalPrice: "2.337.500đ",
-      bonusImageAlt: "Hộp giấy dạng gói quà tặng",
-      bonus: "Free ship toàn quốc",
-      isPopular: false
+      title: "COMBO TÁI TẠO",
+      image: comboTaiTao,
+      quantity: "4 HỘP",
+      originalPrice: "2,672,000đ",
+      finalPrice: "2,200,000đ",
+      bonus: "FREESHIP TOÀN QUỐC",
+      headerColor: "#FF7903"
     },
     {
-      title: "Gói Tối Ưu",
-      image: productImage,
-      quantity: "3 Hộp TRUE VEGAN PROTEIN",
-      finalPrice: "1,650,000đ",
-      bonus: "Tặng 1 hộp giấy dạng gói như hình!",
-      hasClickableBonus: true,
-      bonusImage: giftBoxImage,
-      isPopular: false
+      title: "COMBO PHỤC HỒI",
+      image: comboPhucHoi,
+      quantity: "6 HỘP",
+      originalPrice: "4,008,000đ",
+      finalPrice: "3,300,000đ",
+      bonus: "TẶNG 01 MUỐI TRE\nFREESHIP TOÀN QUỐC",
+      headerColor: "#84CC16"
     },
     {
-      title: "Hộp Giấy 868g",
-      image: paperBoxImage,
-      quantity: "31 Gói TRUE VEGAN PROTEIN",
-      finalPrice: "950.000đ",
-      bonus: "Tiện lợi mang theo!",
-      isPopular: false
+      title: "COMBO TOÀN DIỆN",
+      image: comboToanDien,
+      quantity: "8 HỘP",
+      originalPrice: "5,344,000đ",
+      finalPrice: "4,400,000đ",
+      bonus: "TẶNG 01 TRÀ TUỆ MINH",
+      headerColor: "#84CC16"
     },
     {
-      title: "Hộp Giấy 868g x2",
-      image: paperBoxImage2, 
-      quantity: "62 Gói TRUE VEGAN PROTEIN (2 hộp)",
-      originalPrice: "1.918.000đ",
-      discount: "-5%",
-      finalPrice: "1.822.100đ",
-      bonus: "Tiết kiệm 95.900đ!",
-      isPopular: false
+      title: "COMBO GIA ĐÌNH",
+      image: comboGiaDinh,
+      quantity: "10 HỘP",
+      originalPrice: "6,668,000đ",
+      finalPrice: "5,500,000đ",
+      bonus: "TẶNG 02 TRÀ TUỆ MINH",
+      headerColor: "#FF7903"
     },
     {
-      title: "Hộp Giấy 868g x3",
-      image: paperBoxImage3,
-      quantity: "93 Gói TRUE VEGAN PROTEIN (3 hộp)",
-      originalPrice: "2.877.000đ", 
-      discount: "-10%",
-      finalPrice: "2.589.300đ",
-      bonus: "Tiết kiệm 287.700đ + Free ship!",
-      isPopular: true
+      title: "COMBO SỨC KHỎE DÀI HẠN",
+      image: comboSucKhoeDaiHan,
+      quantity: "14 HỘP",
+      originalPrice: "9,352,000đ",
+      finalPrice: "7,700,000đ",
+      bonus: "TẶNG 02 TRÀ TUỆ MINH\n+ FREE SHIP",
+      headerColor: "#84CC16"
     }
   ];
 
   return (
     <OrderContainer>
       <Content>
-        <Title>SẴN SÀNG TRẢI NGHIỆM TRUE VEGAN PROTEIN?</Title>
+        <Title>SẴN SÀNG TRẢI NGHIỆM TRUE VEGAN PROTEIN PRO?</Title>
         <Subtitle>ƯU ĐÃI KẾT THÚC SAU</Subtitle>
         <TimerContainer>
           <TimeBox>{String(timeLeft.hours).padStart(2, '0')}</TimeBox>
@@ -371,34 +347,34 @@ const OrderSection = () => {
         </Description>
         <PackagesGrid>
           {packages.map((pkg, index) => (
-            <PackageCard key={index} isPopular={pkg.isPopular}>
-              {pkg.isPopular && <PopularBadge>BEST SELLER</PopularBadge>}
-              <PackageTitle>{pkg.title}</PackageTitle>
-              <PackageImage src={pkg.image} alt={pkg.title} />
-              <PackageTitle>{pkg.quantity}</PackageTitle>
-              <Price>
-                {pkg.originalPrice && (
-                  <OriginalPrice>
-                    Giá gốc: {pkg.originalPrice}
-                    {/* <DiscountBadge>{pkg.discount}</DiscountBadge> */}
-                  </OriginalPrice>
-                )}
-                <FinalPrice>{pkg.finalPrice}</FinalPrice>
-              </Price>
-              {pkg.bonus && (
-                <Bonus>
-                  {pkg.hasClickableBonus && pkg.bonusImage ? (
-                    <ClickableText onClick={() => handleGiftBoxClick(pkg.bonusImage, pkg.bonusImageAlt || 'Quà tặng')}>
-                      {pkg.bonus}
-                    </ClickableText>
-                  ) : (
-                    pkg.bonus
+            <PackageCard key={index}>
+              <CardHeader bgColor={pkg.headerColor}>
+                <CardHeaderTitle>{pkg.title}</CardHeaderTitle>
+              </CardHeader>
+              <CardBody>
+                <ImageWrapper>
+                  <PackageImage src={pkg.image} alt={pkg.title} />
+                </ImageWrapper>
+                <PackageQuantity>{pkg.quantity}</PackageQuantity>
+                <Price>
+                  <FinalPrice>{pkg.finalPrice}</FinalPrice>
+                  {pkg.originalPrice && (
+                    <OriginalPrice>
+                      Giá gốc: {pkg.originalPrice}
+                    </OriginalPrice>
                   )}
+                </Price>
+                <Bonus>
+                  {pkg.bonus ? pkg.bonus.split('\n').map((line, i) => (
+                    <div key={i}>{line}</div>
+                  )) : <div>&nbsp;</div>}
                 </Bonus>
-              )}
-              <BuyButton isPopular={pkg.isPopular} onClick={() => handleOrder(index)}>
-                {pkg.isPopular ? 'MUA NGAY + TIẾT KIỆM 10%' : 'MUA NGAY'}
-              </BuyButton>
+                <CardFooter>
+                  <BuyButton onClick={() => handleOrder(index)}>
+                    MUA NGAY
+                  </BuyButton>
+                </CardFooter>
+              </CardBody>
             </PackageCard>
           ))}
         </PackagesGrid>
@@ -417,13 +393,6 @@ const OrderSection = () => {
           </FeatureItem>
         </Features>
       </Content>
-      
-      <ImageModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        imageSrc={modalImage}
-        imageAlt={modalAlt}
-      />
     </OrderContainer>
   );
 };
