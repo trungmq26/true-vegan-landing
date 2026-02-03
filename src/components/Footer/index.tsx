@@ -247,15 +247,15 @@ const Footer = () => {
           <ContactInfo>
             <ContactItem>
               <ContactIcon>📍</ContactIcon>
-              <span>Số 63/253 đường Ngô Quyền, Phường Tân Bình, TP Hải Dương, tỉnh Hải Dương</span>
+              <span>Số 63/253 đường Ngô Quyền, phường Lê Thanh Nghị, TP Hải Phòng, tỉnh Hải Dương</span>
             </ContactItem>
             <ContactItem>
               <ContactIcon>📞</ContactIcon>
-              <span>0336759982 - 0396748848</span>
+              <span>098 793 1551 - 0398 767 885</span>
             </ContactItem>
             <ContactItem>
               <ContactIcon>✉️</ContactIcon>
-              <span>tmdv.hopecorp@gmail.com</span>
+              <span>ikihealingdetox@gmail.com</span>
             </ContactItem>
           </ContactInfo>
         </CompanyInfo>
