@@ -5,8 +5,8 @@ const Header: FunctionComponent = () => {
   return (
     <div className={styles.headerContainer}>
       <b className={styles.snPhmDinhContainer}>
-        <span>Sản Phẩm Dinh DƯỠNG CHÍNH HÃNG Theo Công Thức Của </span>
-        <span className={styles.tinSLng}>Tiến Sỹ. Lương Y Ngô Đức Vượng</span>
+        <span>SẢN PHẨM DINH DƯỠNG CHÍNH HÃNG THEO CÔNG THỨC CỦA </span>
+        <span className={styles.tinSLng}>TIẾN SỸ. LƯƠNG Y NGÔ ĐỨC VƯỢNG</span>
       </b>
     </div>
   );

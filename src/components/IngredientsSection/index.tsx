@@ -38,7 +38,7 @@ const MainTitle = styled.h2`
 
 const SubTitle = styled.h3`
   font-size: 1.5rem;
-  color: #666;
+  color: #68B026;
   font-weight: normal;
 
   @media (max-width: 768px) {
@@ -172,9 +172,9 @@ const IngredientsSection = () => {
       <Content>
         <Title>
           <MainTitle>THÀNH PHẦN ĐỘT PHÁ</MainTitle>
-          {/* <SubTitle>
-            BÍ QUYẾT TRONG CÔNG THỨC TRUE VEGAN PROTEIN
-          </SubTitle> */}
+          <SubTitle> 
+          BÍ QUYẾT TRONG CÔNG THỨC TRUE VEGAN PROTEIN PRO
+          </SubTitle>
           {/* <SubTitle>
             Khám phá các thành phần đặc biệt, kết hợp hoàn hảo theo công thức độc quyền từ Lương y Ngô Đức Vượng
           </SubTitle> */}

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import usageImage from '../../assets/images/section8/Frame 1272638802 (1).png';
+import usageImage from '../../assets/images/section8/cong_dung.png';
 
 const UsageContainer = styled.section`
   width: 100%;

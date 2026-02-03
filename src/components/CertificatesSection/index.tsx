@@ -5,6 +5,8 @@ import cert3 from '../../assets/images/chung_nhan/ISOPM_003.png';
 import cert4 from '../../assets/images/chung_nhan/1.jpg';
 import cert5 from '../../assets/images/chung_nhan/2.jpg';
 import cert6 from '../../assets/images/chung_nhan/9207_0001.jpg';
+import cert7 from '../../assets/images/chung_nhan/4.jpg';
+
 
 const CertificatesContainer = styled.section`
   padding: 4rem 2rem;
@@ -33,7 +35,7 @@ const Title = styled.h2`
 
 const CertificatesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
   margin-top: 2rem;
 
@@ -69,21 +71,21 @@ const CertificateImage = styled.img`
 
 const CertificatesSection = () => {
   const certificates = [
-    {
-      id: 'cert1',
-      image: cert1,
-      alt: 'Chứng nhận ISO-GMP HADU79 2023'
-    },
-    {
-      id: 'cert2',
-      image: cert2,
-      alt: 'Chứng nhận ISO PM 001'
-    },
-    {
-      id: 'cert3',
-      image: cert3,
-      alt: 'Chứng nhận ISO PM 003'
-    },
+    // {
+    //   id: 'cert1',
+    //   image: cert1,
+    //   alt: 'Chứng nhận ISO-GMP HADU79 2023'
+    // },
+    // {
+    //   id: 'cert2',
+    //   image: cert2,
+    //   alt: 'Chứng nhận ISO PM 001'
+    // },
+    // {
+    //   id: 'cert3',
+    //   image: cert3,
+    //   alt: 'Chứng nhận ISO PM 003'
+    // },
     {
       id: 'cert4',
       image: cert4,
@@ -97,6 +99,11 @@ const CertificatesSection = () => {
     {
       id: 'cert6',
       image: cert6,
+      alt: 'Chứng nhận 9207_0001'
+    },
+    {
+      id: 'cert7',
+      image: cert7,
       alt: 'Chứng nhận 9207_0001'
     }
   ];

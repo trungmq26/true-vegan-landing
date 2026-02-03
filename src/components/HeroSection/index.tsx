@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import heroImage from '../../assets/images/section1/Home page (1).png';
+import heroImage from '../../assets/images/section1/Home page.png';
 
 
 const HeroContainer = styled.section`
